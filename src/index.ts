@@ -171,6 +171,12 @@ function buildTokens(options: Options): Record<string, string> {
   let serverStart: string;
   let moduleAliasImport: string;
 
+  const dbUrlMap: Record<string, string> = {
+    postgresql: `postgresql://user:password@localhost:5432/${options.projectName}`,
+    mysql: `mysql://user:password@localhost:3306/${options.projectName}`,
+    sqlite: `file:./dev.db`,
+  };
+
   if (isBun) {
     serverDev = `bun --watch src/index.${ext}`;
     serverBuild = isTS ? `bun build src/index.${ext} --outdir dist --target bun` : "";
@@ -205,6 +211,7 @@ function buildTokens(options: Options): Record<string, string> {
     __SERVER_BUILD__: serverBuild,
     __SERVER_START__: serverStart,
     __MODULE_ALIAS_IMPORT__: moduleAliasImport,
+    __DATABASE_URL__: dbUrlMap[options.database],
   };
 }
 

@@ -1,0 +1,8 @@
+datasource db {
+  provider = "__DATABASE_PROVIDER__"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated"
+}
