@@ -28,10 +28,10 @@ type AdapterConfig = {
 };
 
 const pkgAdd: Record<string, string> = {
-  npm: "npm install",
-  yarn: "yarn add",
-  pnpm: "pnpm add",
-  bun: "bun add",
+  npm: "npm install --ignore-scripts",
+  yarn: "yarn add --ignore-scripts",
+  pnpm: "pnpm add --ignore-scripts",
+  bun: "bun add --ignore-scripts",
 };
 
 const pkgDevFlag: Record<string, string> = {
@@ -362,11 +362,12 @@ async function main() {
       try {
         const prod = ws.pkgs.filter((p) => !p.dev).map((p) => p.name);
         const dev = ws.pkgs.filter((p) => p.dev).map((p) => p.name);
-        if (prod.length) execSync(`${add} ${prod.join(" ")}`, { cwd: ws.dir, stdio: "pipe", timeout: 120000 });
-        if (dev.length) execSync(`${add} ${devFlag} ${dev.join(" ")}`, { cwd: ws.dir, stdio: "pipe", timeout: 120000 });
+        if (prod.length) execSync(`${add} ${prod.join(" ")}`, { cwd: ws.dir, stdio: "inherit", timeout: 120000 });
+        if (dev.length) execSync(`${add} ${devFlag} ${dev.join(" ")}`, { cwd: ws.dir, stdio: "inherit", timeout: 120000 });
         s.stop(`${ws.label} dependencies installed`);
-      } catch {
-        s.stop(`Warning: could not install ${ws.label} dependencies`);
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        s.stop(`Warning: could not install ${ws.label} dependencies (${msg})`);
       }
     }
   }
