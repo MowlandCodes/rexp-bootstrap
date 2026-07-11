@@ -1,0 +1,19 @@
+{
+  "name": "__PROJECT_NAME__",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": ["client", "server"],
+  "scripts": {
+    "dev": "concurrently -n client,server -c cyan,green \"__PKG_RUN__ dev:client\" \"__PKG_RUN__ dev:server\"",
+    "dev:client": "npm -w client run dev",
+    "dev:server": "npm -w server run dev",
+    "build": "npm -w client run build && npm -w server run build",
+    "start": "npm -w server run start",
+    "db:generate": "npm -w server run db:generate",
+    "db:migrate": "npm -w server run db:migrate",
+    "db:studio": "npm -w server run db:studio"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@db/*": ["./generated/*"]
+    }
+  },
+  "include": ["src"]
+}
