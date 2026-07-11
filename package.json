@@ -1,12 +1,41 @@
 {
   "name": "create-rexp",
   "version": "1.0.0",
-  "module": "index.ts",
+  "description": "Scaffold a React + Express + Prisma full-stack monorepo",
   "type": "module",
+  "bin": {
+    "create-rexp": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir=dist --target=node --format=esm",
+    "prepublishOnly": "bun run build"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.7.0"
+  },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "typescript": "^5"
   },
   "peerDependencies": {
     "typescript": "^5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mowlandcodes/create-rexp.git"
+  },
+  "keywords": [
+    "react",
+    "express",
+    "prisma",
+    "fullstack",
+    "monorepo",
+    "scaffold"
+  ],
+  "license": "MIT",
+  "author": "mowlandcodes"
 }
