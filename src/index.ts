@@ -5,6 +5,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { existsSync } from "node:fs";
 import { execSync } from "node:child_process";
+import pc from "picocolors";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -377,9 +378,11 @@ async function main() {
   }
 
   outro(`
-  ${options.projectName} ready!
+  ${pc.green("✔")} ${pc.bold(options.projectName)} ${pc.green("is ready!")}
 
-  ${tokens.__PKG_RUN__} dev`);
+  ${pc.dim("Next steps:")}
+  ${pc.cyan("  cd " + options.projectName)}
+  ${pc.cyan("  " + tokens.__PKG_RUN__ + " dev")}`);
 }
 
 main().catch((err) => {
