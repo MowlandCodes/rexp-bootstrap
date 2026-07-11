@@ -252,7 +252,10 @@ function getPackages(options: Options): { root: Package[]; client: Package[]; se
   const isTS = options.language === "ts";
   const adapter = adapterMap[options.database]!;
 
-  const root: Package[] = [{ name: "concurrently", dev: true }];
+  const root: Package[] = [
+    { name: "concurrently", dev: true },
+    { name: "prettier", dev: true },
+  ];
 
   const client: Package[] = [
     { name: "react", dev: false },
