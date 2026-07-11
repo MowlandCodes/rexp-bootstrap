@@ -4,7 +4,7 @@
   "description": "Scaffold a React + Express + Prisma full-stack monorepo",
   "type": "module",
   "bin": {
-    "create-rexp": "./dist/index.js"
+    "create-rexp": "dist/index.js"
   },
   "files": [
     "dist",
@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mowlandcodes/rexp-bootstrap"
+    "url": "https://github.com/MowlandCodes/rexp-bootstrap"
   },
   "keywords": [
     "react",
