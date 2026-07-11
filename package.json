@@ -12,7 +12,10 @@
   ],
   "scripts": {
     "build": "bun build ./src/index.ts --outdir=dist --target=node --format=esm",
-    "prepublishOnly": "bun run build"
+    "prepublishOnly": "bun run build",
+    "bump:patch": "npm version patch -m \"chore: release v%s\"",
+    "bump:minor": "npm version minor -m \"chore: release v%s\"",
+    "bump:major": "npm version major -m \"chore: release v%s\""
   },
   "dependencies": {
     "@clack/prompts": "^1.7.0"
