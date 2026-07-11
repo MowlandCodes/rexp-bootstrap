@@ -1,6 +1,6 @@
 {
   "name": "create-rexp",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Scaffold a React + Express + Prisma full-stack monorepo",
   "type": "module",
   "bin": {
