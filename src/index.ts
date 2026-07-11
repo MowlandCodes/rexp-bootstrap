@@ -46,8 +46,8 @@ const adapterMap: Record<string, AdapterConfig> = {
   },
 };
 
-function validateProjectName(value: string): string | undefined {
-  if (value.length === 0) return "Project name is required";
+function validateProjectName(value: string | undefined): string | undefined {
+  if (!value || value.length === 0) return "Project name is required";
   if (!/^[a-z0-9-_.]+$/i.test(value))
     return "Only letters, numbers, hyphens, dots, and underscores allowed";
   if (/^[._-]/.test(value)) return "Name cannot start with a special character";
@@ -150,7 +150,7 @@ function buildTokens(options: Options): Record<string, string> {
   const isBun = options.runtime === "bun";
   const ext = isTS ? "ts" : "js";
   const tsxExt = isTS ? "tsx" : "jsx";
-  const adapter = adapterMap[options.database];
+  const adapter = adapterMap[options.database]!;
 
   const pkgInstall: Record<string, string> = {
     npm: "npm install",
@@ -205,13 +205,13 @@ function buildTokens(options: Options): Record<string, string> {
     __EXT__: ext,
     __TSX_EXT__: tsxExt,
     __PKG_MANAGER__: options.packageManager,
-    __PKG_INSTALL__: pkgInstall[options.packageManager],
-    __PKG_RUN__: pkgRun[options.packageManager],
+    __PKG_INSTALL__: pkgInstall[options.packageManager]!,
+    __PKG_RUN__: pkgRun[options.packageManager]!,
     __SERVER_DEV__: serverDev,
     __SERVER_BUILD__: serverBuild,
     __SERVER_START__: serverStart,
     __MODULE_ALIAS_IMPORT__: moduleAliasImport,
-    __DATABASE_URL__: dbUrlMap[options.database],
+    __DATABASE_URL__: dbUrlMap[options.database]!,
   };
 }
 
@@ -279,13 +279,16 @@ async function main() {
   }
 
   if (options.installDeps) {
-    s.start("Installing dependencies...");
-    try {
-      execSync(tokens.__PKG_INSTALL__, { cwd: targetDir, stdio: "inherit", timeout: 120000 });
-      s.stop("Dependencies installed");
-    } catch {
-      s.stop("Warning: could not install all dependencies");
-      console.log(`  Run "${tokens.__PKG_INSTALL__}" inside "${options.projectName}" manually`);
+    const installCmd = tokens.__PKG_INSTALL__;
+    if (installCmd) {
+      s.start("Installing dependencies...");
+      try {
+        execSync(installCmd, { cwd: targetDir, stdio: "inherit", timeout: 120000 });
+        s.stop("Dependencies installed");
+      } catch {
+        s.stop("Warning: could not install all dependencies");
+        console.log(`  Run "${installCmd}" inside "${options.projectName}" manually`);
+      }
     }
   }
 
