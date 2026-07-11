@@ -25,50 +25,40 @@ const controllerPath = resolve(
 const content = isTS
   ? `import type { Request, Response } from "express";
 import { ${serviceName} } from "@/services/${fileName}.service";
-import { BadRequestError } from "@/errors";
 
 export const ${instanceName}Controller = {
   async getAll(_req: Request, res: Response) {
     const items = await ${serviceName}.findAll();
-    res.json(items);
+    res.sendSuccess(items);
   },
 
   async getById(req: Request, res: Response) {
-    const { id } = req.params;
-    if (!id) throw new BadRequestError("ID is required");
-    const item = await ${serviceName}.findById(id);
-    res.json(item);
+    const item = await ${serviceName}.findById(req.params.id);
+    res.sendSuccess(item);
   },
 
   async create(req: Request, res: Response) {
-    const data = req.body;
-    if (!data) throw new BadRequestError("Body is required");
-    const item = await ${serviceName}.create(data);
-    res.status(201).json(item);
+    const item = await ${serviceName}.create(req.body);
+    res.sendSuccess(item, "${controllerName} created", 201);
   },
 };
 `
   : `import { ${serviceName} } from "@/services/${fileName}.service";
-import { BadRequestError } from "@/errors";
 
 export const ${instanceName}Controller = {
   async getAll(_req, res) {
     const items = await ${serviceName}.findAll();
-    res.json(items);
+    res.sendSuccess(items);
   },
 
   async getById(req, res) {
-    const { id } = req.params;
-    if (!id) throw new BadRequestError("ID is required");
-    const item = await ${serviceName}.findById(id);
-    res.json(item);
+    const item = await ${serviceName}.findById(req.params.id);
+    res.sendSuccess(item);
   },
 
   async create(req, res) {
-    const data = req.body;
-    if (!data) throw new BadRequestError("Body is required");
-    const item = await ${serviceName}.create(data);
-    res.status(201).json(item);
+    const item = await ${serviceName}.create(req.body);
+    res.sendSuccess(item, "${controllerName} created", 201);
   },
 };
 `;
