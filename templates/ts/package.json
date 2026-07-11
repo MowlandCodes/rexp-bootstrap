@@ -14,6 +14,7 @@
     "db:studio": "npm -w server run db:studio",
     "make:controller": "node scripts/make-controller.mjs",
     "make:model": "node scripts/make-model.mjs",
+    "make:schema": "node scripts/make-schema.mjs",
     "make:service": "node scripts/make-service.mjs",
     "make:view": "node scripts/make-view.mjs"
   }
