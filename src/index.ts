@@ -281,6 +281,7 @@ function getPackages(options: Options): { root: Package[]; client: Package[]; se
     { name: "express", dev: false },
     { name: "helmet", dev: false },
     { name: "morgan", dev: false },
+    { name: "zod", dev: false },
     { name: adapter.pkg, dev: false },
     { name: adapter.driver, dev: false },
     { name: "prisma", dev: true },
