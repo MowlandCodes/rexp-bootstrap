@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mowlandcodes/create-rexp.git"
+    "url": "git+https://github.com/mowlandcodes/rexp-bootstrap.git"
   },
   "keywords": [
     "react",
