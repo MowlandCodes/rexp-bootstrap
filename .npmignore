@@ -1,0 +1,26 @@
+node_modules
+.gitignore
+.env
+.env.*
+
+# Exclude the example environment file from being published to npm
+!.env.example
+
+# Ignore build artifacts
+dist
+build
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore cache and coverage directories
+.cache
+coverage
+.eslintcache
