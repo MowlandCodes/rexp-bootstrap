@@ -11,7 +11,11 @@
     "start": "npm -w server run start",
     "db:generate": "npm -w server run db:generate",
     "db:migrate": "npm -w server run db:migrate",
-    "db:studio": "npm -w server run db:studio"
+    "db:studio": "npm -w server run db:studio",
+    "make:controller": "node scripts/make-controller.mjs",
+    "make:model": "node scripts/make-model.mjs",
+    "make:service": "node scripts/make-service.mjs",
+    "make:view": "node scripts/make-view.mjs"
   },
   "devDependencies": {
     "concurrently": "^9.1.0"
