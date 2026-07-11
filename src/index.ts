@@ -49,10 +49,10 @@ const adapterMap: Record<string, AdapterConfig> = {
     init: "new PrismaPg({ connectionString: process.env.DATABASE_URL })",
   },
   mysql: {
-    pkg: "@prisma/adapter-mysql",
+    pkg: "@prisma/adapter-mariadb",
     driver: "mysql2",
-    importSpec: "{ PrismaMySql }",
-    init: "new PrismaMySql({ connectionString: process.env.DATABASE_URL })",
+    importSpec: "{ PrismaMariaDb }",
+    init: "new PrismaMariaDb({ connectionString: process.env.DATABASE_URL })",
   },
   sqlite: {
     pkg: "@prisma/adapter-libsql",

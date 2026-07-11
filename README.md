@@ -144,7 +144,7 @@ Request → Routes → Controllers → Services → Prisma
 - Uses `prisma.config.ts` (or `.js`) with `defineConfig` — no more `generator` block for the datasource URL
 - Multi-file schema: `schema.prisma` declares datasource + generator; models live in `prisma/models/*.prisma`
 - Generator output: `output = "../generated"` so the client is at `generated/client`
-- Driver adapters are mandatory in v7. The scaffold includes all three (`@prisma/adapter-pg`, `@prisma/adapter-mysql`, `@prisma/adapter-libsql`) and detects the correct one at runtime via `DATABASE_URL` prefix.
+- Driver adapters are mandatory in v7. The scaffold includes all three (`@prisma/adapter-pg`, `@prisma/adapter-mariadb`, `@prisma/adapter-libsql`) and detects the correct one at runtime via `DATABASE_URL` prefix.
 - `postinstall` script runs `prisma generate` automatically
 
 ## Client architecture
@@ -175,7 +175,7 @@ The scaffold includes all three Prisma v7 driver adapters in `server/package.jso
 | Provider     | Adapter package        | Driver package    |
 | ------------ | ---------------------- | ----------------- |
 | PostgreSQL   | `@prisma/adapter-pg`   | `pg`              |
-| MySQL        | `@prisma/adapter-mysql` | `mysql2`          |
+| MySQL        | `@prisma/adapter-mariadb` | `mysql2`          |
 | SQLite       | `@prisma/adapter-libsql` | `@libsql/client`  |
 
 At runtime, `lib/prisma.ts` imports the correct adapter based on the `DATABASE_URL` prefix, so you only need one adapter installed and it works for any provider you choose.
