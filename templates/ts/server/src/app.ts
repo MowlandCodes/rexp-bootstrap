@@ -4,6 +4,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { errorHandler } from "@/middlewares/errorHandler";
 import { notFoundHandler } from "@/middlewares/notFound";
+import { respond } from "@/middlewares/respond";
 import routes from "@/routes";
 
 const app = express();
@@ -15,6 +16,7 @@ app.set("etag", false);
 
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(respond);
 
 app.use("/api", routes);
 
