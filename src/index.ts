@@ -18,11 +18,27 @@ type Options = {
   installDeps: boolean;
 };
 
+type Package = { name: string; dev: boolean };
+
 type AdapterConfig = {
   pkg: string;
   driver: string;
   importSpec: string;
   init: string;
+};
+
+const pkgAdd: Record<string, string> = {
+  npm: "npm install",
+  yarn: "yarn add",
+  pnpm: "pnpm add",
+  bun: "bun add",
+};
+
+const pkgDevFlag: Record<string, string> = {
+  npm: "-D",
+  yarn: "-D",
+  pnpm: "-D",
+  bun: "-d",
 };
 
 const adapterMap: Record<string, AdapterConfig> = {
@@ -232,6 +248,58 @@ async function replaceTokens(dir: string, tokens: Record<string, string>): Promi
   }
 }
 
+function getPackages(options: Options): { root: Package[]; client: Package[]; server: Package[] } {
+  const isTS = options.language === "ts";
+  const adapter = adapterMap[options.database]!;
+
+  const root: Package[] = [{ name: "concurrently", dev: true }];
+
+  const client: Package[] = [
+    { name: "react", dev: false },
+    { name: "react-dom", dev: false },
+    { name: "@vitejs/plugin-react", dev: true },
+    { name: "tailwindcss", dev: true },
+    { name: "@tailwindcss/vite", dev: true },
+    { name: "vite", dev: true },
+  ];
+
+  if (isTS) {
+    client.push(
+      { name: "typescript", dev: true },
+      { name: "@types/react", dev: true },
+      { name: "@types/react-dom", dev: true },
+    );
+  }
+
+  const server: Package[] = [
+    { name: "@prisma/client", dev: false },
+    { name: "cors", dev: false },
+    { name: "dotenv", dev: false },
+    { name: "express", dev: false },
+    { name: "helmet", dev: false },
+    { name: "morgan", dev: false },
+    { name: adapter.pkg, dev: false },
+    { name: adapter.driver, dev: false },
+    { name: "prisma", dev: true },
+  ];
+
+  if (isTS) {
+    server.push(
+      { name: "tsx", dev: true },
+      { name: "tsup", dev: true },
+      { name: "typescript", dev: true },
+      { name: "@types/cors", dev: true },
+      { name: "@types/express", dev: true },
+      { name: "@types/morgan", dev: true },
+      { name: "@types/node", dev: true },
+    );
+  } else {
+    server.push({ name: "module-alias", dev: false });
+  }
+
+  return { root, client, server };
+}
+
 async function main() {
   intro("create-rexp");
 
@@ -279,15 +347,26 @@ async function main() {
   }
 
   if (options.installDeps) {
-    const installCmd = tokens.__PKG_INSTALL__;
-    if (installCmd) {
-      s.start("Installing dependencies...");
+    const packages = getPackages(options);
+    const add = pkgAdd[options.packageManager]!;
+    const devFlag = pkgDevFlag[options.packageManager]!;
+
+    const workspaces: { label: string; dir: string; pkgs: Package[] }[] = [
+      { label: "Root", dir: targetDir, pkgs: packages.root },
+      { label: "Client", dir: join(targetDir, "client"), pkgs: packages.client },
+      { label: "Server", dir: join(targetDir, "server"), pkgs: packages.server },
+    ];
+
+    for (const ws of workspaces) {
+      s.start(`Installing ${ws.label} dependencies...`);
       try {
-        execSync(installCmd, { cwd: targetDir, stdio: "inherit", timeout: 120000 });
-        s.stop("Dependencies installed");
+        const prod = ws.pkgs.filter((p) => !p.dev).map((p) => p.name);
+        const dev = ws.pkgs.filter((p) => p.dev).map((p) => p.name);
+        if (prod.length) execSync(`${add} ${prod.join(" ")}`, { cwd: ws.dir, stdio: "pipe", timeout: 120000 });
+        if (dev.length) execSync(`${add} ${devFlag} ${dev.join(" ")}`, { cwd: ws.dir, stdio: "pipe", timeout: 120000 });
+        s.stop(`${ws.label} dependencies installed`);
       } catch {
-        s.stop("Warning: could not install all dependencies");
-        console.log(`  Run "${installCmd}" inside "${options.projectName}" manually`);
+        s.stop(`Warning: could not install ${ws.label} dependencies`);
       }
     }
   }

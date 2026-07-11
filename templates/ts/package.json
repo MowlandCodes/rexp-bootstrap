@@ -16,8 +16,5 @@
     "make:model": "node scripts/make-model.mjs",
     "make:service": "node scripts/make-service.mjs",
     "make:view": "node scripts/make-view.mjs"
-  },
-  "devDependencies": {
-    "concurrently": "^9.1.0"
   }
 }
